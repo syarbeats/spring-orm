@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.learning.spring.spring_orm_hibernate.entity.Employee;
 
@@ -15,10 +16,26 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 
 	private SessionFactory sessionFactory;
 	
+	@Transactional(readOnly=false)
 	@Override
 	public void addEmployee(Employee emp) {
-		// TODO Auto-generated method stub
+		
+		getSession().createSQLQuery("Insert into Employee(id, name, salary) Values(?, ?, ?)")
+		.setParameter(1, emp.getId())
+		.setParameter(2, emp.getName())
+		.setParameter(3, emp.getSalary()).executeUpdate();
+	}
+	
+	public Session getSession() {
+		Session session;
 
+		try {
+		    session = sessionFactory.getCurrentSession();
+		} catch (HibernateException e) {
+		    session = sessionFactory.openSession();
+		}
+		
+		return session;
 	}
 
 	@Override
@@ -31,16 +48,7 @@ public class EmployeeDaoImpl implements IEmployeeDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Employee> getEmployeeList() {
-		
-		Session session;
-
-		try {
-		    session = sessionFactory.getCurrentSession();
-		} catch (HibernateException e) {
-		    session = sessionFactory.openSession();
-		}
-		
-		return session.createQuery("from Employee").list();
+		return getSession().createQuery("from Employee").list();
 	}
 
 	public SessionFactory getSessionFactory() {

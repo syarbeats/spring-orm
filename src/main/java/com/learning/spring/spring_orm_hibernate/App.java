@@ -25,5 +25,8 @@ public class App
      	   System.out.println("Employee:"+employee.getName()+", Salary:"+employee.getSalary());
         }
         
+        System.out.println("Add new employee..");
+        empDaoImpl.addEmployee(new Employee(207, "Goerge Martin", 60000));
+        empDaoImpl.getSessionFactory().close();
     }
 }

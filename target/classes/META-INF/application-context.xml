@@ -15,8 +15,6 @@
 		<property name="username" value="root" />
 		<property name="password" value="Diah!)@(*" />
 	</bean>
-	
-	<tx:annotation-driven/>
 	 
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
     	<property name="dataSource">
@@ -38,6 +36,7 @@
     <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 	<bean id="employeeDaoImpl" class="com.learning.spring.spring_orm_hibernate.dao.EmployeeDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean>
